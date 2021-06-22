@@ -75,6 +75,19 @@ export default {
       this.problem.wrong = res.data.problem.wrong
       this.problem.concept = res.data.problem.concept
       this.problem.preConcept = res.data.problem.preConcept
+      this.myChart2.setOption({
+        title: {
+          subtext: '问题总次数为：' + res.data.problem.all
+        },
+        series: [
+          {
+            data: [
+              { value: res.data.problem.right, name: 'right' },
+              { value: res.data.problem.wrong, name: 'wrong' }
+            ]
+          }
+        ]
+      })
       console.log(this.problem)
     }
   },
@@ -182,10 +195,10 @@ export default {
     // myChart.setOption(option)
     //
     var myChart2 = echarts.init(document.getElementById('main2'))
-    var option2 = {
+    myChart2.setOption({
       title: {
         text: '问题正确错误占比',
-        subtext: '问题总次数为：' + this.problem.all,
+        subtext: [],
         left: 'center'
       },
       tooltip: {
@@ -200,10 +213,7 @@ export default {
           name: '次数',
           type: 'pie',
           radius: '50%',
-          data: [
-            { value: this.problem.right, name: 'right' },
-            { value: this.problem.wrong, name: 'wrong' }
-          ],
+          data: [],
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -213,8 +223,7 @@ export default {
           }
         }
       ]
-    }
-    myChart2.setOption(option2)
+    })
   }
 }
 </script>
