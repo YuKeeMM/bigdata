@@ -6,7 +6,6 @@
                 <img src="../assets/zucc2.jpg" alt="">
                 <span class="el-header-write">大数据分析系统</span>
             </div>
-            <el-button type="info" @click="logout">退出</el-button>
         </el-header>
         <el-container>
             <!-- 侧边栏 -->
@@ -22,7 +21,7 @@
                     <!-- 一级菜单(index只接受字符串，要把数值变为字符串在后面加一个''空字符串就好) -->
                     <el-menu-item index="first">
                       <i class="el-icon-s-home"></i>
-                      <span slot="title">首页</span>
+                      <span slot="title">第一页</span>
                     </el-menu-item>
                     <el-menu-item index="second">
                       <i class="el-icon-trophy"></i>
