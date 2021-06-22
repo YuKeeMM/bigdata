@@ -51,6 +51,35 @@ export default {
         wrong: '',
         concept: '',
         preConcept: ''
+      },
+      option: {
+        title: {
+          text: '问题正确错误占比',
+          subtext: [],
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
+        },
+        series: [
+          {
+            name: '次数',
+            type: 'pie',
+            radius: '50%',
+            data: [],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
       }
     }
   },
@@ -75,6 +104,8 @@ export default {
       this.problem.wrong = res.data.problem.wrong
       this.problem.concept = res.data.problem.concept
       this.problem.preConcept = res.data.problem.preConcept
+      console.log(this.problem)
+      this.myChart2 = echarts.init(document.getElementById('main2'))
       this.myChart2.setOption({
         title: {
           subtext: '问题总次数为：' + res.data.problem.all
@@ -88,7 +119,6 @@ export default {
           }
         ]
       })
-      console.log(this.problem)
     }
   },
   mounted () {
@@ -195,35 +225,7 @@ export default {
     // myChart.setOption(option)
     //
     var myChart2 = echarts.init(document.getElementById('main2'))
-    myChart2.setOption({
-      title: {
-        text: '问题正确错误占比',
-        subtext: [],
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left'
-      },
-      series: [
-        {
-          name: '次数',
-          type: 'pie',
-          radius: '50%',
-          data: [],
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-          }
-        }
-      ]
-    })
+    myChart2.setOption(this.option)
   }
 }
 </script>
