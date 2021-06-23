@@ -84,10 +84,14 @@
           <el-button type="primary" icon="el-icon-search" @click="getQuestionAll">获取所有问题信息</el-button>
         </el-col>
       </el-row>
-      <el-table :data="videos" border stripe>
+      <el-table :data="problems" border stripe>
         <el-table-column type="index"></el-table-column>
-        <el-table-column label="视频Id" prop="videoId"></el-table-column>
-        <el-table-column label="视频时长（分钟）" prop="duration"></el-table-column>
+        <el-table-column label="问题Id" prop="problemId"></el-table-column>
+        <el-table-column label="答题总次数" prop="all"></el-table-column>
+        <el-table-column label="答对次数" prop="right"></el-table-column>
+        <el-table-column label="答错次数" prop="wrong"></el-table-column>
+        <el-table-column label="问题知识点" prop="concept"></el-table-column>
+        <el-table-column label="问题先修知识" prop="preConcept"></el-table-column>
       </el-table>
       <!-- 分页区域 -->
       <el-pagination
@@ -242,7 +246,7 @@ export default {
       this.myChart2 = echarts.init(document.getElementById('main2'))
       this.myChart2.setOption({
         title: {
-          subtext: '问题总次数为：' + res.data.problem.all
+          subtext: '问题总次数为：' + res.data.problem.all + '问题涉及知识点' + res.data.problem.concept + '问题先修知识点' + res.data.problem.preConcept
         },
         series: [
           {
