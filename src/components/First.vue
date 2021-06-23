@@ -5,12 +5,12 @@
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>第一页</el-breadcrumb-item>
     </el-breadcrumb>
+    <!-- 获取视频信息 -->
     <el-card>
-      <!-- 搜索与添加区域 -->
       <el-row :gutter="20">
         <el-col :span="7">
           <el-input placeholder="请输入视频Id" v-model="videoId" clearable @clear="getVideo">
-            <el-button slot="append" icon="el-icon-search" @click="getVideo"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="getVideo">获取视频信息</el-button>
           </el-input>
         </el-col>
         <el-col :span="5">
@@ -19,19 +19,61 @@
       </el-row>
     </el-card>
     <div style="height: 50px"></div>
-    <!-- 卡片区域 -->
+    <!-- 获取问题信息 -->
     <el-card>
-      <!-- 搜索与添加区域 -->
       <el-row :gutter="20">
         <el-col :span="7">
           <el-input placeholder="请输入问题Id" v-model="problemId" clearable @clear="getQuestion">
-            <el-button slot="append" icon="el-icon-search" @click="getQuestion">查看</el-button>
+            <el-button slot="append" icon="el-icon-search" @click="getQuestion">获取问题信息</el-button>
           </el-input>
         </el-col>
       </el-row>
       <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-      <!-- <div id="main" style="width: 1000px; height: 800px"></div> -->
       <div id="main2" style="width: 1000px; height: 800px"></div>
+    </el-card>
+    <div style="height: 50px"></div>
+    <!-- 获取学生信息 -->
+    <el-card>
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <el-input placeholder="请输入学生Id" v-model="studentId" clearable @clear="getStudent">
+            <el-button slot="append" icon="el-icon-search" @click="getStudent">获取学生信息</el-button>
+          </el-input>
+        </el-col>
+      </el-row>
+      <el-table :data="student" border stripe>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="学生Id" prop="studentId"></el-table-column>
+        <el-table-column label="学生掌握知识点" prop="conceptGrasp"></el-table-column>
+        <el-table-column label="学生大致掌握知识点" prop="conceptAlmostGrasp"></el-table-column>
+        <el-table-column label="学生未掌握知识点" prop="conceptNoGrasp"></el-table-column>
+        <el-table-column label="学生总答题目数" prop="all"></el-table-column>
+        <el-table-column label="学生正确题目数" prop="right"></el-table-column>
+      </el-table>
+      <div style="width: 1000px; height: 100px"></div>
+    </el-card>
+    <!-- 获取所有视频信息 -->
+    <el-card>
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <el-button type="primary" icon="el-icon-search" @click="getVideoAll">获取所有视频信息</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="videos" border stripe>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="视频Id" prop="videoId"></el-table-column>
+        <el-table-column label="视频时长（分钟）" prop="duration"></el-table-column>
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="queryInfo.current"
+      :page-sizes="[1, 2, 5, 10]"
+      :page-size="queryInfo.size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+      </el-pagination>
     </el-card>
   </div>
 </template>
@@ -43,9 +85,13 @@ export default {
   data () {
     return {
       videoId: '',
-      duration: '',
+      video: {
+        videoId: '',
+        duration: ''
+      },
       problemId: '',
       problem: {
+        problemId: '',
         all: '',
         right: '',
         wrong: '',
@@ -80,18 +126,32 @@ export default {
             }
           }
         ]
-      }
+      },
+      studentId: '',
+      student: [{
+        studentId: '',
+        conceptGrasp: '',
+        conceptAlmostGrasp: '',
+        conceptNoGrasp: '',
+        all: '',
+        right: ''
+      }],
+      queryInfo: {
+        current: 1,
+        size: 2
+      },
+      videos: []
     }
   },
   created () {},
-  // 此时页面上的元素，已经被渲染完毕了
   methods: {
     async getVideo() {
       console.log(this.videoId)
       const { data: res } = await this.$http.get('getVideoTable', { params: { videoId: this.videoId } })
       if (res.code !== 200) return this.$message.error(res.data.提示)
       this.$message.success(res.message)
-      this.duration = res.data.video.duration
+      this.video.videoId = res.data.video.videoId
+      this.video.duration = res.data.video.duration
       console.log(this.problem)
     },
     async getQuestion() {
@@ -99,6 +159,7 @@ export default {
       const { data: res } = await this.$http.get('getProblemTable', { params: { problemId: this.problemId } })
       if (res.code !== 200) return this.$message.error(res.data.提示)
       this.$message.success(res.message)
+      this.problem.problemId = res.data.problem.problemId
       this.problem.all = res.data.problem.all
       this.problem.right = res.data.problem.right
       this.problem.wrong = res.data.problem.wrong
@@ -119,8 +180,30 @@ export default {
           }
         ]
       })
+    },
+    async getStudent() {
+      console.log(this.studentId)
+      const { data: res } = await this.$http.get('getStudentTable', { params: { studentId: this.studentId } })
+      if (res.code !== 200) return this.$message.error(res.data.提示)
+      this.$message.success(res.message)
+      this.student.studentId = res.data.student.studentId
+      this.student.conceptGrasp = res.data.student.conceptGrasp
+      this.student.conceptAlmostGrasp = res.data.student.conceptAlmostGrasp
+      this.student.conceptNoGrasp = res.data.student.conceptNoGrasp
+      this.student.all = res.data.student.all
+      this.student.right = res.data.student.right
+      console.log(this.student)
+    },
+    async getVideoAll() {
+      console.log(this.queryInfo)
+      const { data: res } = await this.$http.get('getAllVideoTable', { params: this.queryInfo })
+      if (res.code !== 200) return this.$message.error(res.data.提示)
+      this.$message.success(res.message)
+      this.videos = res.data.videos
+      console.log(this.videos)
     }
   },
+  // 此时页面上的元素，已经被渲染完毕了
   mounted () {
     // 基于准备好的dom，初始化echarts实例
     // var myChart = echarts.init(document.getElementById('main'))
