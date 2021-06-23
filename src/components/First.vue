@@ -14,7 +14,7 @@
           </el-input>
         </el-col>
         <el-col :span="5">
-          <div class="video_Time">该视频的持续时间为：{{this.duration}}</div>
+          <div class="video_Time">该视频的持续时间为：{{this.duration1}}</div>
         </el-col>
       </el-row>
     </el-card>
@@ -29,7 +29,7 @@
         </el-col>
       </el-row>
       <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-      <div id="main2" style="width: 1000px; height: 800px"></div>
+      <div id="main1" style="width: 1000px; height: 800px"></div>
     </el-card>
     <div style="height: 50px"></div>
     <!-- 获取学生信息 -->
@@ -70,7 +70,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="queryInfo.current"
-      :page-sizes="[1, 2, 5, 10]"
+      :page-sizes="[20, 30, 40, 50]"
       :page-size="queryInfo.size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
@@ -79,7 +79,7 @@
     <div style="height: 50px"></div>
     <!-- 获取所有问题信息 -->
     <el-card>
-      <el-row :gutter="20">
+      <!-- <el-row :gutter="20">
         <el-col :span="7">
           <el-button type="primary" icon="el-icon-search" @click="getQuestionAll">获取所有问题信息</el-button>
         </el-col>
@@ -93,16 +93,16 @@
         <el-table-column label="问题知识点" prop="concept"></el-table-column>
         <el-table-column label="问题先修知识" prop="preConcept"></el-table-column>
       </el-table>
-      <!-- 分页区域 -->
       <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="queryInfo2.current"
-      :page-sizes="[1, 2, 5, 10]"
+      :page-sizes="[20, 30, 40, 50]"
       :page-size="queryInfo2.size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
-      </el-pagination>
+      </el-pagination> -->
+      <div id="main2" style="width: 1000px; height: 800px"></div>
     </el-card>
     <div style="height: 50px"></div>
     <!-- 获取所有学生信息 -->
@@ -126,7 +126,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="queryInfo3.current"
-      :page-sizes="[1, 2, 5, 10]"
+      :page-sizes="[20, 30, 40, 50]"
       :page-size="queryInfo3.size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="studentTotal">
@@ -145,7 +145,7 @@ export default {
       videoId: '',
       video: {
         videoId: '',
-        duration: ''
+        duration1: ''
       },
       // 问题
       problemId: '',
@@ -199,22 +199,69 @@ export default {
       // 所有视频
       queryInfo: {
         current: 1,
-        size: 2
+        size: 20
       },
+      total: 2,
       videos: [],
       // 所有问题
       queryInfo2: {
         current: 1,
-        size: 2
+        size: 20
       },
       totalOfProblem: '',
-      totalOfProblemVo: '',
-      problemVo: [],
-      problems: [],
+      problems: [
+        {
+          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
+          all: 441.0,
+          right: 405.0,
+          wrong: 36.0,
+          concept: '向量',
+          preConcept: null
+        },
+        {
+          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
+          all: 441.0,
+          right: 405.0,
+          wrong: 36.0,
+          concept: '向量',
+          preConcept: null
+        },
+        {
+          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
+          all: 441.0,
+          right: 405.0,
+          wrong: 36.0,
+          concept: '向量',
+          preConcept: null
+        },
+        {
+          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
+          all: 441.0,
+          right: 405.0,
+          wrong: 36.0,
+          concept: '向量',
+          preConcept: null
+        }
+      ],
+      option2: {
+        tooltip: {},
+        legend: {
+          data: ['销量']
+        },
+        xAxis: {
+          data: this.problems
+        },
+        yAxis: {},
+        series: [{
+          name: '销量',
+          type: 'bar',
+          data: [5, 20, 36, 10, 10, 20]
+        }]
+      },
       // 所有学生
       queryInfo3: {
         current: 1,
-        size: 2
+        size: 20
       },
       studentTotal: '',
       students: []
@@ -228,7 +275,7 @@ export default {
       if (res.code !== 200) return this.$message.error(res.data.提示)
       this.$message.success(res.message)
       this.video.videoId = res.data.video.videoId
-      this.video.duration = res.data.video.duration
+      this.video.duration1 = res.data.video.duration
       console.log(this.video)
     },
     async getQuestion() {
@@ -243,8 +290,8 @@ export default {
       this.problem.concept = res.data.problem.concept
       this.problem.preConcept = res.data.problem.preConcept
       console.log(this.problem)
-      this.myChart2 = echarts.init(document.getElementById('main2'))
-      this.myChart2.setOption({
+      this.myChart1 = echarts.init(document.getElementById('main2'))
+      this.myChart1.setOption({
         title: {
           subtext: '问题总次数为：' + res.data.problem.all + '问题涉及知识点' + res.data.problem.concept + '问题先修知识点' + res.data.problem.preConcept
         },
@@ -285,9 +332,7 @@ export default {
       if (res.code !== 200) return this.$message.error(res.data.提示)
       this.$message.success(res.message)
       this.totalOfProblem = res.data.totalOfProblem
-      this.totalOfProblemVo = res.data.totalOfProblemVo
-      this.problemVo = res.data.problemVo
-      this.problems = res.data.problems
+      this.videos = res.data.videos
     },
     async getStudentAll() {
       console.log(this.queryInfo)
@@ -302,110 +347,10 @@ export default {
   },
   // 此时页面上的元素，已经被渲染完毕了
   mounted () {
-    // 基于准备好的dom，初始化echarts实例
-    // var myChart = echarts.init(document.getElementById('main'))
-    // // 指定图表的配置项和数据
-    // var option = {
-    //   title: {
-    //     text: '堆叠区域图'
-    //   },
-    //   tooltip: {
-    //     trigger: 'axis',
-    //     axisPointer: {
-    //       type: 'cross',
-    //       label: {
-    //         backgroundColor: '#6a7985'
-    //       }
-    //     }
-    //   },
-    //   legend: {
-    //     data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
-    //   },
-    //   toolbox: {
-    //     feature: {
-    //       saveAsImage: {}
-    //     }
-    //   },
-    //   grid: {
-    //     left: '3%',
-    //     right: '4%',
-    //     bottom: '3%',
-    //     containLabel: true
-    //   },
-    //   xAxis: [
-    //     {
-    //       type: 'category',
-    //       boundaryGap: false,
-    //       data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-    //     }
-    //   ],
-    //   yAxis: [
-    //     {
-    //       type: 'value'
-    //     }
-    //   ],
-    //   series: [
-    //     {
-    //       name: '邮件营销',
-    //       type: 'line',
-    //       stack: '总量',
-    //       areaStyle: {},
-    //       emphasis: {
-    //         focus: 'series'
-    //       },
-    //       data: [120, 132, 101, 134, 90, 230, 210]
-    //     },
-    //     {
-    //       name: '联盟广告',
-    //       type: 'line',
-    //       stack: '总量',
-    //       areaStyle: {},
-    //       emphasis: {
-    //         focus: 'series'
-    //       },
-    //       data: [220, 182, 191, 234, 290, 330, 310]
-    //     },
-    //     {
-    //       name: '视频广告',
-    //       type: 'line',
-    //       stack: '总量',
-    //       areaStyle: {},
-    //       emphasis: {
-    //         focus: 'series'
-    //       },
-    //       data: [150, 232, 201, 154, 190, 330, 410]
-    //     },
-    //     {
-    //       name: '直接访问',
-    //       type: 'line',
-    //       stack: '总量',
-    //       areaStyle: {},
-    //       emphasis: {
-    //         focus: 'series'
-    //       },
-    //       data: [320, 332, 301, 334, 390, 330, 320]
-    //     },
-    //     {
-    //       name: '搜索引擎',
-    //       type: 'line',
-    //       stack: '总量',
-    //       label: {
-    //         show: true,
-    //         position: 'top'
-    //       },
-    //       areaStyle: {},
-    //       emphasis: {
-    //         focus: 'series'
-    //       },
-    //       data: [820, 932, 901, 934, 1290, 1330, 1320]
-    //     }
-    //   ]
-    // }
-    // // 使用刚指定的配置项和数据显示图表。
-    // myChart.setOption(option)
-    //
+    var myChart1 = echarts.init(document.getElementById('main1'))
+    myChart1.setOption(this.option)
     var myChart2 = echarts.init(document.getElementById('main2'))
-    myChart2.setOption(this.option)
+    myChart2.setOption(this.option2)
   }
 }
 </script>
