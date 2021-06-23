@@ -52,6 +52,7 @@
       </el-table>
       <div style="width: 1000px; height: 100px"></div>
     </el-card>
+    <div style="height: 50px"></div>
     <!-- 获取所有视频信息 -->
     <el-card>
       <el-row :gutter="20">
@@ -75,6 +76,58 @@
       :total="total">
       </el-pagination>
     </el-card>
+    <div style="height: 50px"></div>
+    <!-- 获取所有问题信息 -->
+    <el-card>
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <el-button type="primary" icon="el-icon-search" @click="getQuestionAll">获取所有问题信息</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="videos" border stripe>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="视频Id" prop="videoId"></el-table-column>
+        <el-table-column label="视频时长（分钟）" prop="duration"></el-table-column>
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="queryInfo2.current"
+      :page-sizes="[1, 2, 5, 10]"
+      :page-size="queryInfo2.size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+      </el-pagination>
+    </el-card>
+    <div style="height: 50px"></div>
+    <!-- 获取所有学生信息 -->
+    <el-card>
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <el-button type="primary" icon="el-icon-search" @click="getStudentAll">获取所有学生信息</el-button>
+        </el-col>
+      </el-row>
+      <el-table :data="students" border stripe>
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="学生Id" prop="studentId"></el-table-column>
+        <el-table-column label="学生掌握知识点" prop="conceptGrasp"></el-table-column>
+        <el-table-column label="学生大致掌握知识点" prop="conceptAlmostGrasp"></el-table-column>
+        <el-table-column label="学生未掌握知识点" prop="conceptNoGrasp"></el-table-column>
+        <el-table-column label="学生总答题目数" prop="all"></el-table-column>
+        <el-table-column label="学生正确题目数" prop="right"></el-table-column>
+      </el-table>
+      <!-- 分页区域 -->
+      <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="queryInfo3.current"
+      :page-sizes="[1, 2, 5, 10]"
+      :page-size="queryInfo3.size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="studentTotal">
+      </el-pagination>
+    </el-card>
   </div>
 </template>
 
@@ -84,11 +137,13 @@ import * as echarts from 'echarts'
 export default {
   data () {
     return {
+      // 视频
       videoId: '',
       video: {
         videoId: '',
         duration: ''
       },
+      // 问题
       problemId: '',
       problem: {
         problemId: '',
@@ -127,6 +182,7 @@ export default {
           }
         ]
       },
+      // 学生
       studentId: '',
       student: [{
         studentId: '',
@@ -136,11 +192,28 @@ export default {
         all: '',
         right: ''
       }],
+      // 所有视频
       queryInfo: {
         current: 1,
         size: 2
       },
-      videos: []
+      videos: [],
+      // 所有问题
+      queryInfo2: {
+        current: 1,
+        size: 2
+      },
+      totalOfProblem: '',
+      totalOfProblemVo: '',
+      problemVo: [],
+      problems: [],
+      // 所有学生
+      queryInfo3: {
+        current: 1,
+        size: 2
+      },
+      studentTotal: '',
+      students: []
     }
   },
   created () {},
@@ -152,7 +225,7 @@ export default {
       this.$message.success(res.message)
       this.video.videoId = res.data.video.videoId
       this.video.duration = res.data.video.duration
-      console.log(this.problem)
+      console.log(this.video)
     },
     async getQuestion() {
       console.log(this.problemId)
@@ -201,6 +274,26 @@ export default {
       this.$message.success(res.message)
       this.videos = res.data.videos
       console.log(this.videos)
+    },
+    async getQuestionAll() {
+      console.log(this.queryInfo)
+      const { data: res } = await this.$http.get('getAllProblemTable', { params: this.queryInfo2 })
+      if (res.code !== 200) return this.$message.error(res.data.提示)
+      this.$message.success(res.message)
+      this.totalOfProblem = res.data.totalOfProblem
+      this.totalOfProblemVo = res.data.totalOfProblemVo
+      this.problemVo = res.data.problemVo
+      this.problems = res.data.problems
+    },
+    async getStudentAll() {
+      console.log(this.queryInfo)
+      const { data: res } = await this.$http.get('getAllStudentTable', { params: this.queryInfo3 })
+      if (res.code !== 200) return this.$message.error(res.data.提示)
+      this.$message.success(res.message)
+      this.total = res.data.total
+      this.students = res.data.students
+      console.log(this.total)
+      console.log(this.students)
     }
   },
   // 此时页面上的元素，已经被渲染完毕了
