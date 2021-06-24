@@ -172,12 +172,12 @@ export default {
         current: 1,
         size: 20
       },
-      totalOfProblem: 1,
+      totalOfProblem: 4,
       problems: [
         {
           problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
           all: 441.0,
-          right: 405.0,
+          right: 400.0,
           wrong: 36.0,
           concept: '向量',
           preConcept: null
@@ -185,41 +185,43 @@ export default {
         {
           problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
           all: 441.0,
-          right: 405.0,
+          right: 300.0,
           wrong: 36.0,
-          concept: '向量',
+          concept: '朱政旭',
           preConcept: null
         },
         {
           problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
           all: 441.0,
-          right: 405.0,
+          right: 456.0,
           wrong: 36.0,
-          concept: '向量',
+          concept: '陈奕翰',
           preConcept: null
         },
         {
           problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
           all: 441.0,
-          right: 405.0,
+          right: 205.0,
           wrong: 36.0,
-          concept: '向量',
+          concept: '林浩然',
           preConcept: null
         }
       ],
+      xAxisdata: [],
+      seriesdata: [],
       option2: {
         tooltip: {},
         legend: {
-          data: ['正确率']
+          data: ['正确']
         },
         xAxis: {
-          data: this.problems
+          data: ['向量', '朱政旭', '陈奕翰', '林浩然']
         },
         yAxis: {},
         series: [{
-          name: '正确率',
+          name: '正确',
           type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
+          data: [200, 300, 456, 654]
         }]
       },
       // 所有学生
@@ -312,13 +314,28 @@ export default {
       console.log(this.videos)
     },
     async getQuestionAll() {
-      console.log(this.queryInfo)
-      const { data: res } = await this.$http.get('getAllProblemTable', { params: this.queryInfo2 })
-      if (res.code !== 200) return this.$message.error(res.data.提示)
-      this.$message.success(res.message)
-      this.totalOfProblem = res.data.totalOfProblem
-      this.problems = res.data.problems
+      console.log(this.queryInfo2)
+      // const { data: res } = await this.$http.get('getAllProblemTable', { params: this.queryInfo2 })
+      // if (res.code !== 200) return this.$message.error(res.data.提示)
+      // this.$message.success(res.message)
+      // this.totalOfProblem = res.data.totalOfProblem
+      // this.problems = res.data.problems
+      console.log(this.problems)
       this.myChart2 = echarts.init(document.getElementById('main2'))
+      for (let j = 0; j < this.totalOfProblem; j++) {
+        this.xAxisdata[j] = this.problems[j].concept
+        this.seriesdata[j] = this.problems[j].right
+      }
+      console.log(this.xAxisdata)
+      console.log(this.seriesdata)
+      this.myChart2.setOption({
+        xAxis: {
+          data: [this.xAxisdata]
+        },
+        series: [{
+          data: [this.seriesdata]
+        }]
+      })
     },
     async getStudentAll() {
       console.log(this.queryInfo)
@@ -328,6 +345,8 @@ export default {
       this.total = res.data.total
       this.students = res.data.students
       console.log(this.total)
+      for (let i = 0; i < this.total; i++) {
+      }
       console.log(this.students)
       this.myChart3 = echarts.init(document.getElementById('main3'))
     }

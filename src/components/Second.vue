@@ -8,7 +8,7 @@
     <!-- 卡片区域 -->
     <el-card>
       <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-      <div id="main1" style="width: 1000px; height: 800px"></div>
+      <div id="main1" style="width: 1000px; height: 1000px"></div>
     </el-card>
   </div>
 </template>
@@ -19,6 +19,106 @@ import * as echarts from 'echarts'
 export default {
   data() {
     return {
+      option: {
+        backgroundColor: '#333',
+        legend: {
+          bottom: 30,
+          data: ['北京', '上海', '广州'],
+          itemGap: 20,
+          textStyle: {
+            color: '#fff',
+            fontSize: 14
+          }
+        },
+        tooltip: {
+          padding: 10,
+          backgroundColor: '#222',
+          borderColor: '#777',
+          borderWidth: 1
+        },
+        parallelAxis: [
+          {
+            dim: 0,
+            name: this.schema[0].text,
+            inverse: true,
+            max: 31,
+            nameLocation: 'start'
+          },
+          { dim: 1, name: this.schema[1].text },
+          { dim: 2, name: this.schema[2].text },
+          { dim: 3, name: this.schema[3].text },
+          { dim: 4, name: this.schema[4].text },
+          { dim: 5, name: this.schema[5].text },
+          { dim: 6, name: this.schema[6].text },
+          {
+            dim: 7,
+            name: this.schema[7].text,
+            type: 'category',
+            data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']
+          }
+        ],
+        visualMap: {
+          show: true,
+          min: 0,
+          max: 150,
+          dimension: 2,
+          inRange: {
+            color: ['#d94e5d', '#eac736', '#50a3ba'].reverse()
+            // colorAlpha: [0, 1]
+          }
+        },
+        parallel: {
+          left: '5%',
+          right: '18%',
+          bottom: 100,
+          parallelAxisDefault: {
+            type: 'value',
+            name: 'AQI指数',
+            nameLocation: 'end',
+            nameGap: 20,
+            nameTextStyle: {
+              color: '#fff',
+              fontSize: 12
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#aaa'
+              }
+            },
+            axisTick: {
+              lineStyle: {
+                color: '#777'
+              }
+            },
+            splitLine: {
+              show: false
+            },
+            axisLabel: {
+              color: '#fff'
+            }
+          }
+        },
+        series: [
+          {
+            name: '北京',
+            type: 'parallel',
+            lineStyle: this.lineStyle,
+            data: this.dataBJ
+          },
+          {
+            name: '上海',
+            type: 'parallel',
+            lineStyle: this.lineStyle,
+            data: this.dataSH
+          },
+          {
+            name: '广州',
+            type: 'parallel',
+            lineStyle: this.lineStyle,
+            data: this.dataGZ
+          }
+        ]
+      },
       dataBJ: [
         [1, 55, 9, 56, 0.46, 18, 6, '良'],
         [2, 25, 11, 21, 0.65, 34, 9, '优'],
@@ -133,106 +233,6 @@ export default {
           width: 1,
           opacity: 0.5
         }
-      },
-      option: {
-        backgroundColor: '#333',
-        legend: {
-          bottom: 30,
-          data: ['北京', '上海', '广州'],
-          itemGap: 20,
-          textStyle: {
-            color: '#fff',
-            fontSize: 14
-          }
-        },
-        tooltip: {
-          padding: 10,
-          backgroundColor: '#222',
-          borderColor: '#777',
-          borderWidth: 1
-        },
-        parallelAxis: [
-          {
-            dim: 0,
-            name: this.schema[0].text,
-            inverse: true,
-            max: 31,
-            nameLocation: 'start'
-          },
-          { dim: 1, name: this.schema[1].text },
-          { dim: 2, name: this.schema[2].text },
-          { dim: 3, name: this.schema[3].text },
-          { dim: 4, name: this.schema[4].text },
-          { dim: 5, name: this.schema[5].text },
-          { dim: 6, name: this.schema[6].text },
-          {
-            dim: 7,
-            name: this.schema[7].text,
-            type: 'category',
-            data: ['优', '良', '轻度污染', '中度污染', '重度污染', '严重污染']
-          }
-        ],
-        visualMap: {
-          show: true,
-          min: 0,
-          max: 150,
-          dimension: 2,
-          inRange: {
-            color: ['#d94e5d', '#eac736', '#50a3ba'].reverse()
-            // colorAlpha: [0, 1]
-          }
-        },
-        parallel: {
-          left: '5%',
-          right: '18%',
-          bottom: 100,
-          parallelAxisDefault: {
-            type: 'value',
-            name: 'AQI指数',
-            nameLocation: 'end',
-            nameGap: 20,
-            nameTextStyle: {
-              color: '#fff',
-              fontSize: 12
-            },
-            axisLine: {
-              lineStyle: {
-                color: '#aaa'
-              }
-            },
-            axisTick: {
-              lineStyle: {
-                color: '#777'
-              }
-            },
-            splitLine: {
-              show: false
-            },
-            axisLabel: {
-              color: '#fff'
-            }
-          }
-        },
-        series: [
-          {
-            name: '北京',
-            type: 'parallel',
-            lineStyle: this.lineStyle,
-            data: this.dataBJ
-          },
-          {
-            name: '上海',
-            type: 'parallel',
-            lineStyle: this.lineStyle,
-            data: this.dataSH
-          },
-          {
-            name: '广州',
-            type: 'parallel',
-            lineStyle: this.lineStyle,
-            data: this.dataGZ
-          }
-        ]
       }
     }
   },
