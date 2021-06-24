@@ -215,13 +215,13 @@ export default {
           data: ['正确']
         },
         xAxis: {
-          data: ['向量', '朱政旭', '陈奕翰', '林浩然']
+          data: []
         },
         yAxis: {},
         series: [{
           name: '正确',
           type: 'bar',
-          data: [200, 300, 456, 654]
+          data: []
         }]
       },
       // 所有学生
@@ -330,10 +330,10 @@ export default {
       console.log(this.seriesdata)
       this.myChart2.setOption({
         xAxis: {
-          data: [this.xAxisdata]
+          data: this.xAxisdata
         },
         series: [{
-          data: [this.seriesdata]
+          data: this.seriesdata
         }]
       })
     },
