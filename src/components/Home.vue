@@ -23,13 +23,9 @@
                       <i class="el-icon-s-home"></i>
                       <span slot="title">第一页</span>
                     </el-menu-item>
-                    <el-menu-item index="second">
-                      <i class="el-icon-trophy"></i>
-                      <span slot="title">第二页</span>
-                    </el-menu-item>
                     <el-menu-item index="third">
                       <i class="el-icon-ship"></i>
-                      <span slot="title">第三页</span>
+                      <span slot="title">第二页</span>
                     </el-menu-item>
                 </el-menu>
             </el-aside>

@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>第三页</el-breadcrumb-item>
+      <el-breadcrumb-item>第二页</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 获取课程信息 -->
     <el-card>
@@ -40,9 +40,6 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-button type="primary" icon="el-icon-search" @click="getCourseAll"
-            >获取所有课程信息</el-button
-          >
         </el-col>
       </el-row>
       <div id="main" style="width: 1000px; height: 800px"></div>
@@ -60,10 +57,11 @@
         </el-col>
         <el-col :span="5">
           <div class="video_Time">
-            结果：{{this.judge1.answer}},
-            正确率: {{this.judge1.rightRate}},
-            结果分析: {{this.judge1.analyse}},
-            错误率: {{this.judge1.errorRate}},
+            <p>正确率:  {{this.judge1.rightRate}}</p >
+            <p>结果分析:  {{this.judge1.analyse}}</p >
+            <p>结果:  {{this.judge1.answer}}</p >
+            <p>错误率:  {{this.judge1.errorRate}}</p >
+            <p>已掌握知识点:  {{this.judge1.studentDetail}}</p >
           </div>
         </el-col>
       </el-row>
@@ -111,104 +109,7 @@ export default {
         current: 1,
         size: 12
       },
-      courses: [
-        {
-          courseId: 'course-v1:JXUST+JXUST2016001+2016_T2',
-          videoCount: 40.0,
-          videoDuration: 31652.875,
-          count: 38.0,
-          allTimes: 238.0,
-          rightTimes: 194.0
-        },
-        {
-          courseId: 'course-v1:TsinghuaX+30240243X+sp',
-          videoCount: 137.0,
-          videoDuration: 84349.83200000004,
-          count: 108.0,
-          allTimes: 6292.0,
-          rightTimes: 5520.0
-        },
-        {
-          courseId: 'course-v1:UST+UST001+sp',
-          videoCount: 112.0,
-          videoDuration: 68070.06300000002,
-          count: 56.0,
-          allTimes: 33737.0,
-          rightTimes: 31492.0
-        },
-        {
-          courseId: 'course-v1:HBNU+2019051509X+2019_T1',
-          videoCount: 41.0,
-          videoDuration: 15853.258999999996,
-          count: 12.0,
-          allTimes: 17.0,
-          rightTimes: 15.0
-        },
-        {
-          courseId: 'course-v1:TsinghuaX+70240403+2019_T1',
-          videoCount: 113.0,
-          videoDuration: 56032.15299999999,
-          count: 68.0,
-          allTimes: 527.0,
-          rightTimes: 95.0
-        },
-        {
-          courseId: 'course-v1:TsinghuaX+30240184+sp',
-          videoCount: 235.0,
-          videoDuration: 63273.746000000014,
-          count: 155.0,
-          allTimes: 28339.0,
-          rightTimes: 26222.0
-        },
-        {
-          courseId: 'course-v1:TsinghuaX+00740043X_2015_T2+sp',
-          videoCount: 115.0,
-          videoDuration: 58214.863999999994,
-          count: 87.0,
-          allTimes: 15674.0,
-          rightTimes: 14211.0
-        },
-        {
-          courseId: 'course-v1:TsinghuaX+00740043_2x_2015_T2+sp',
-          videoCount: 85.0,
-          videoDuration: 35754.35999999999,
-          count: 48.0,
-          allTimes: 4503.0,
-          rightTimes: 4006.0
-        },
-        {
-          courseId: 'course-v1:TsinghuaX+00740123_X+sp',
-          videoCount: 104.0,
-          videoDuration: 55478.733999999975,
-          count: 81.0,
-          allTimes: 5870.0,
-          rightTimes: 4950.0
-        },
-        {
-          courseId: 'course-v1:SCUT+2018122802X+2018_T2',
-          videoCount: 46.0,
-          videoDuration: 22259.376,
-          count: 0.0,
-          allTimes: 0.0,
-          rightTimes: 0.0
-        },
-        {
-          courseId: 'course-v1:TsinghuaX+30240184_2X+sp',
-          videoCount: 272.0,
-          videoDuration: 66304.50299999995,
-          count: 119.0,
-          allTimes: 10300.0,
-          rightTimes: 9507.0
-        },
-        {
-          courseId: 'course-v1:MITx+6_00_1x+sp',
-          videoCount: 105.0,
-          videoDuration: 44843.642,
-          count: 62.0,
-          allTimes: 641.0,
-          rightTimes: 571.0
-        }
-      ],
+      courses: [],
       seriesdata1: [[]],
       option: {
         parallelAxis: [
@@ -216,7 +117,7 @@ export default {
           { dim: 1, name: '错误次数' },
           { dim: 2, name: '视频总数' },
           { dim: 3, name: '视频时间数' },
-          { dim: 4, name: '视频数量' }
+          { dim: 4, name: '题目数量' }
         ],
         series: {
           type: 'parallel',
@@ -228,14 +129,14 @@ export default {
             [6292.0, 5520.0, 137.0, 84349.83200000004, 108.0],
             [33737.0, 31492.0, 112.0, 68070.06300000002, 56.0],
             [17.0, 15.0, 41.0, 15853.258999999996, 12.0],
-            [6292.0, 5520.0, 137.0, 84349.83200000004, 108.0],
-            [33737.0, 31492.0, 112.0, 68070.06300000002, 56.0],
-            [238.0, 194.0, 40.0, 31652.875, 38.0],
-            [6292.0, 5520.0, 137.0, 84349.83200000004, 108.0],
-            [33737.0, 31492.0, 112.0, 68070.06300000002, 56.0],
-            [238.0, 194.0, 40.0, 31652.875, 38.0],
-            [6292.0, 5520.0, 137.0, 84349.83200000004, 108.0],
-            [33737.0, 31492.0, 112.0, 68070.06300000002, 56.0]
+            [527.0, 95.0, 113.0, 56032.15299999999, 68.0],
+            [28339.0, 26222.0, 235.0, 63273.746000000014, 155.0],
+            [15674.0, 14211.0, 115.0, 58214.863999999994, 87.0],
+            [4503.0, 4006.0, 85.0, 35754.35999999999, 48.0],
+            [5870.0, 4950.0, 104.0, 55478.733999999975, 81.0],
+            [0.0, 0.0, 46.0, 22259.376, 0.0],
+            [10300.0, 9507.0, 272.0, 66304.50299999995, 119.0],
+            [641.0, 571.0, 105.0, 44843.642, 62.0]
           ]
         }
       }

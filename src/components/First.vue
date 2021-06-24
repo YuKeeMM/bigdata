@@ -194,7 +194,7 @@ export default {
       // 所有学生
       queryInfo3: {
         current: 1,
-        size: 4
+        size: 2000
       },
       studentTotal: '',
       students: [],
@@ -244,7 +244,7 @@ export default {
       this.myChart1 = echarts.init(document.getElementById('main1'))
       this.myChart1.setOption({
         title: {
-          subtext: '问题总次数为：' + res.data.problem.all + '问题涉及知识点' + res.data.problem.concept + '问题先修知识点' + res.data.problem.preConcept
+          subtext: '问题总次数为：' + res.data.problem.all + ' 。问题涉及知识点：' + res.data.problem.concept
         },
         series: [
           {
@@ -269,12 +269,22 @@ export default {
       this.student[0].right = res.data.student.right
       console.log(this.student)
     },
+    handleSizeChange(newSize) {
+      this.queryInfo.size = newSize
+      // 重新获取数据
+      this.getVideoAll()
+    },
+    handleCurrentChange(newPage) {
+      this.queryInfo.current = newPage
+      this.getVideoAll()
+    },
     async getVideoAll() {
       console.log(this.queryInfo)
       const { data: res } = await this.$http.get('getAllVideoTable', { params: this.queryInfo })
       if (res.code !== 200) return this.$message.error(res.data.提示)
       this.$message.success(res.message)
       this.videos = res.data.videos
+      this.total = res.data.total
       console.log(this.videos)
     },
     async getQuestionAll() {
@@ -312,7 +322,7 @@ export default {
       console.log(this.students)
       this.myChart3 = echarts.init(document.getElementById('main3'))
       for (let i = 0; i < this.queryInfo3.size; i++) {
-        this.seriesdata1[i] = [this.students[i].right, this.students[i].all, this.students[i].countOfNoGrasp, this.students[i].countOfAlmostGrasp, this.students[i].countOfGrasp]
+        this.seriesdata1[i] = [this.students[i].right, this.students[i].all - this.students[i].right, this.students[i].countOfNoGrasp, this.students[i].countOfAlmostGrasp, this.students[i].countOfGrasp]
       }
       console.log(this.seriesdata1)
       this.myChart3.setOption({
