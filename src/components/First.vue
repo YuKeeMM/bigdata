@@ -170,43 +170,10 @@ export default {
       // 所有问题
       queryInfo2: {
         current: 1,
-        size: 20
+        size: 300
       },
       totalOfProblem: 4,
-      problems: [
-        {
-          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
-          all: 441.0,
-          right: 400.0,
-          wrong: 36.0,
-          concept: '向量',
-          preConcept: null
-        },
-        {
-          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
-          all: 441.0,
-          right: 300.0,
-          wrong: 36.0,
-          concept: '朱政旭',
-          preConcept: null
-        },
-        {
-          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
-          all: 441.0,
-          right: 456.0,
-          wrong: 36.0,
-          concept: '陈奕翰',
-          preConcept: null
-        },
-        {
-          problemId: 'P_01c72494e56b41ddba14524d3e4e0ab7',
-          all: 441.0,
-          right: 205.0,
-          wrong: 36.0,
-          concept: '林浩然',
-          preConcept: null
-        }
-      ],
+      problems: [],
       xAxisdata: [],
       seriesdata: [],
       option2: {
@@ -227,14 +194,15 @@ export default {
       // 所有学生
       queryInfo3: {
         current: 1,
-        size: 20
+        size: 4
       },
       studentTotal: '',
       students: [],
+      seriesdata1: [[]],
       option3: {
         parallelAxis: [
-          { dim: 0, name: '正确率' },
-          { dim: 1, name: '错误率' },
+          { dim: 0, name: '正确' },
+          { dim: 1, name: '错误' },
           { dim: 2, name: '未掌握知识点' },
           { dim: 3, name: '大致掌握知识点' },
           { dim: 4, name: '掌握知识点' }
@@ -244,11 +212,7 @@ export default {
           lineStyle: {
             width: 4
           },
-          data: [
-            [0.6, 0.4, 0.5, 0.2, 0.3],
-            [0.4, 0.6, 0.7, 0.15, 0.15],
-            [0.1, 0.9, 0.4, 0.4, 0.2]
-          ]
+          data: []
         }
       },
       i: 0
@@ -315,14 +279,14 @@ export default {
     },
     async getQuestionAll() {
       console.log(this.queryInfo2)
-      // const { data: res } = await this.$http.get('getAllProblemTable', { params: this.queryInfo2 })
-      // if (res.code !== 200) return this.$message.error(res.data.提示)
-      // this.$message.success(res.message)
-      // this.totalOfProblem = res.data.totalOfProblem
-      // this.problems = res.data.problems
+      const { data: res } = await this.$http.get('getAllProblemTable', { params: this.queryInfo2 })
+      if (res.code !== 200) return this.$message.error(res.data.提示)
+      this.$message.success(res.message)
+      this.totalOfProblem = res.data.totalOfProblem
+      this.problems = res.data.problems
       console.log(this.problems)
       this.myChart2 = echarts.init(document.getElementById('main2'))
-      for (let j = 0; j < this.totalOfProblem; j++) {
+      for (let j = 0; j < this.queryInfo2.size; j++) {
         this.xAxisdata[j] = this.problems[j].concept
         this.seriesdata[j] = this.problems[j].right
       }
@@ -345,10 +309,17 @@ export default {
       this.total = res.data.total
       this.students = res.data.students
       console.log(this.total)
-      for (let i = 0; i < this.total; i++) {
-      }
       console.log(this.students)
       this.myChart3 = echarts.init(document.getElementById('main3'))
+      for (let i = 0; i < this.queryInfo3.size; i++) {
+        this.seriesdata1[i] = [this.students[i].right, this.students[i].all, this.students[i].countOfNoGrasp, this.students[i].countOfAlmostGrasp, this.students[i].countOfGrasp]
+      }
+      console.log(this.seriesdata1)
+      this.myChart3.setOption({
+        series: [{
+          data: this.seriesdata1
+        }]
+      })
     }
   },
   // 此时页面上的元素，已经被渲染完毕了

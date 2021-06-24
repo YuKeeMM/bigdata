@@ -8,7 +8,7 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="10">
-          <el-input placeholder="请输入课程Id" v-model="courseId" clearable @clear="getCourse">
+          <el-input placeholder="请输入课程Id" v-model="id" clearable @clear="getCourse">
             <el-button slot="append" icon="el-icon-search" @click="getCourse">获取课程信息</el-button>
           </el-input>
         </el-col>
@@ -58,7 +58,7 @@ export default {
       //   ]
       // },
       // 课程
-      courseId: '',
+      id: '',
       course: [{
         courseId: '',
         videoCount: '',
@@ -94,8 +94,8 @@ export default {
   created() {},
   methods: {
     async getCourse() {
-      console.log(this.courseId)
-      const { data: res } = await this.$http.get('getCourseTable', { params: { courseId: this.courseId } })
+      console.log(this.id)
+      const { data: res } = await this.$http.get('getCourseTable', { params: { courseId: this.id } })
       if (res.code !== 200) return this.$message.error(res.data.提示)
       this.$message.success(res.message)
       this.course[0].courseId = res.data.course.courseId
